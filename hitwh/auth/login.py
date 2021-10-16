@@ -10,7 +10,7 @@ from hitwh.utils import get_random_string, HITWH_LoginError
 
 def isloggedin(session : requests.Session) -> bool:
     response = session.get(f"{auth_url}/authserver/index.do")
-    return response.status_code == 200
+    return response.url == f"{auth_url}/authserver/index.do"
 
 def login(username : str, passwd : str) -> requests.Session:
     session = requests.Session()
