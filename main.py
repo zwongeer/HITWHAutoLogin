@@ -1,5 +1,7 @@
+import asyncio
 import json
 
+import aiohttp
 import hitwh
 from hitwh.auth import *
 
@@ -15,12 +17,20 @@ hitwh.config.request_headers = {
     'Accept-Language': 'zh-CN,zh;q=0.8,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2'
 }
 
-if __name__ == "__main__":
+async def main():
     data = json.load(open('account.json'))
-    session = login(data["username"], data["password"])
+    session = await login(data["username"], data["password"])
     
-    session.get("http://jwts.hitwh.edu.cn/loginCAS")
-    response = session.get("http://172.26.64.16/xfj/queryListXfj")
-    print(response.text)
-    session.get("http://172.26.64.16/logout")
-    logout(session)
+    await session.get("http://jwts.hitwh.edu.cn/loginCAS")
+    response = await session.get("http://172.26.64.16/xfj/queryListXfj")
+    print(await response.text())
+    await session.get("http://172.26.64.16/logout")
+    await logout(session)
+    await session.close()
+
+    # s = aiohttp.ClientSession()
+    # print(await isloggedin(s))
+    # await s.close()
+
+if __name__ == "__main__":
+    asyncio.run(main())

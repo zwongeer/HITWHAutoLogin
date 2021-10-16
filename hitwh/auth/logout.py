@@ -1,9 +1,10 @@
 import requests
 
 import hitwh
+import aiohttp
 from hitwh.config import auth_url
 
-def logout(session : requests.Session):
+async def logout(session : aiohttp.ClientSession):
     if session is None:
         return
-    session.get(f"{auth_url}/authserver/logout?service=/authserver/login")
+    await session.get(f"{auth_url}/authserver/logout?service=/authserver/login")
